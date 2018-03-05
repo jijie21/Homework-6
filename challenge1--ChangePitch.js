@@ -1,3 +1,5 @@
+//Challege: This code change the pitch by moving the mouse up and down
+
 var positionX = [];
 var positionY = [];
 var size = [];
@@ -15,15 +17,21 @@ var circleHue = [60, 180, 220, 260, 300, 30];
 var playing = false;
 var huevalue = 0;
 
-var slider;
+var osc, fft;
 
 function setup() {
+
+  osc = new p5.TriOsc(); // set frequency and type
+  osc.amp(.5);
+
+  fft = new p5.FFT();
+  osc.start();
+
 
   createCanvas(600, 400);
   backgroundColor = color(0);
   colorMode(HSB, 360, 1, 1);
- slider = createSlider(0,1,0.5,0.01);
-  
+
   for (var i = 0; i < 100; i++) {
     positionX[i] = random(width);
     positionY[i] = random(height);
@@ -51,7 +59,7 @@ function setup() {
 
 function draw() {
   background(0);
-  
+
   for (var a = 0; a < 100; a++) {
 
     fill(colors[a]);
@@ -59,8 +67,8 @@ function draw() {
     var mycolor = colors[a];
     if ((hue(mycolor) == huevalue) && playing) {
       ellipse(positionX[a], positionY[a], size[a] + 30);
-     } else {
-    ellipse(positionX[a], positionY[a], size[a]);
+    } else {
+      ellipse(positionX[a], positionY[a], size[a]);
     }
     positionY[a] += velocity[a];
     positionX[a] += velocity[a];
@@ -85,11 +93,17 @@ function draw() {
       //strokeWeight(1.5);
       fill(circle.hue, 1, 1);
       ellipse(circle.x, circle.y, circle.size, circle.size);
-      
+
     }
   }
+  var waveform = fft.waveform();
+  var freq = map(mouseX, 0, width, 40, 880);
+  osc.freq(freq);
 
+  var amp = map(mouseY, 0, height, 1, .01);
+  osc.amp(amp);
 }
+
 
 
 
@@ -97,7 +111,7 @@ function keyPressed() {
   print("got key press for ", key);
   stroke(255);
   strokeWeight(1.5);
-  
+
   for (i = 0; i < circles.length; i++) {
     var circle = circles[i];
     if (circle.thekey == key) {
