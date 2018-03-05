@@ -8,7 +8,7 @@ function setup() {
   createCanvas(400, 400);
   setTimeout(hello, 1000);
   colorMode(HSB, 360, 1, 1);
-  colors = color(random(0,100), 50, 20);
+  //colors = color(random(0,360), 1, 1);
 }
 
 function hello() {
@@ -21,7 +21,7 @@ function hello() {
 }
 
 function draw() {
-  background(0);
+  background(255);
   stroke(random(0,100),50,20)
   line(x, 0, x, height);
   ellipse(35, 35, 55, 55);
